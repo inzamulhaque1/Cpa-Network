@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const {user, logout} = useAuth()
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -14,28 +16,28 @@ const Navbar = () => {
       {" "}
       <Link
         to="/publisher"
-        className="hover:text-yellow-300 transition duration-300 font-marcellus  "
+        className="hover:text-yellow-300  transition duration-300 font-marcellus tracking-widest	 hover:underline hover:underline-offset-8"
         onClick={toggleMobileMenu}
       >
         Publisher
       </Link>
       <Link
         to="/advertise"
-        className="hover:text-yellow-300 transition duration-300 font-marcellus  "
+        className="hover:text-yellow-300 transition duration-300 font-marcellus tracking-widest  hover:underline hover:underline-offset-8"
         onClick={toggleMobileMenu}
       >
         Advertise
       </Link>
       <Link
         to="/about"
-        className="hover:text-yellow-300 transition duration-300 font-marcellus "
+        className="hover:text-yellow-300 transition duration-300 font-marcellus tracking-widest hover:underline hover:underline-offset-8"
         onClick={toggleMobileMenu}
       >
         About
       </Link>
       <Link
         to="/contact"
-        className="hover:text-yellow-300 transition duration-300 font-marcellus "
+        className="hover:text-yellow-300 transition duration-300 font-marcellus tracking-widest hover:underline hover:underline-offset-8"
         onClick={toggleMobileMenu}
       >
         Contact
@@ -60,7 +62,16 @@ const Navbar = () => {
         {/* Buttons for Desktop */}
 
         <div className="hidden md:flex items-center space-x-4 ">
-          <button
+
+          {
+            user ? <button
+            className="text-red flex   relative  px-4 py-2 rounded-md font-bold overflow-hidden border
+           border-red-500 bg-white  text-red-500 shadow-2xl transition-all before:absolute before:bottom-0 
+           before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-red-500 before:transition-all 
+           duration-1000 before:duration-1000 hover:text-white hover:shadow-red-500 hover:before:left-0 hover:before:w-full"
+          >
+            <Link onClick={logout} className="relative z-10">LogOut</Link>
+          </button> : <div  className="hidden md:flex items-center space-x-4 "><button
             className="text-red flex   relative  px-4 py-2 rounded-md font-bold overflow-hidden border
            border-red-500 bg-white  text-red-500 shadow-2xl transition-all before:absolute before:bottom-0 
            before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-red-500 before:transition-all 
@@ -76,7 +87,11 @@ const Navbar = () => {
           hover:bg-white hover:text-red-600 hover:shadow-blue-600 hover:before:border-[25px]"
           >
             <Link  to={'register'} className="relative z-10">Register</Link>
-          </button>
+          </button></div>
+          
+
+
+         }
         </div>
 
         {/* Mobile Menu Icon */}
@@ -91,20 +106,19 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-indigo-600">
-          <div className="flex flex-col px-10  items-start space-y-4 py-6">
+          <div className="flex flex-col px-10  items-start text-center font-semibold space-y-4 py-6">
             {links}
-            <button
+            <Link to='/login'
               className="bg-white w-full text-indigo-600 hover:bg-gray-100 transition px-4 py-2 rounded-md"
-              onClick={toggleMobileMenu}
             >
               Login
-            </button>
-            <button
+            </Link>
+            <Link to={'/register'}
               className="bg-yellow-300 w-full text-indigo-900 hover:bg-yellow-400 transition px-4 py-2 rounded-md"
-              onClick={toggleMobileMenu}
+              
             >
               Register
-            </button>
+            </Link>
           </div>
         </div>
       )}

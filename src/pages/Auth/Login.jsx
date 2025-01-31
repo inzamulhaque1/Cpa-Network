@@ -10,15 +10,37 @@ import {
 } from "react-icons/fa"; // Added eye icons for password toggle
 import { useState } from "react"; // Import useState for password toggle
 import { Helmet } from "react-helmet-async";
+import useAuth from "../../hooks/useAuth";
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false); // State to handle password visibility
-
+  const { login } = useAuth();
+  // eslint-disable-next-line no-unused-vars
+  const [error, setError] = useState(""); 
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    login(email, password)
+      .then(() => {
+        alert("Login success");
+      })
+      .catch((error) => {
+        setError("Login failed. Please check your credentials.");
+        console.error(error); // Log the error for debugging purposes
+      });
+
+      
+  };
   return (
     <section className="h-screen flex">
       <Helmet>
@@ -45,7 +67,7 @@ const Login = () => {
           </div>
 
           {/* Login Form */}
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={onSubmit}>
             {/* Email Input */}
             <div className="relative">
               <label
@@ -98,12 +120,16 @@ const Login = () => {
               </button>
             </div>
 
+      
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full bg-red-500 text-white py-2 rounded-md font-bold hover:bg-lime-500 focus:outline-none focus:ring-2 focus:ring-lime-500"
+              className="relative w-full px-4 py-2 rounded-md font-bold overflow-hidden border border-black
+             bg-red-500 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 
+             before:top-0 before:z-0 before:h-full before:w-0 before:bg-black before:transition-all duration-1000
+             before:duration-1000 hover:text-white hover:before:left-0 hover:before:w-full"
             >
-              Login
+              <span className="relative z-10">Login</span>
             </button>
           </form>
 

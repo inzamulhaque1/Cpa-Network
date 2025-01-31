@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Macondo&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&display&family=Space+Grotesk=swap');
 
 
 
@@ -14,4 +14,9 @@
 
 .font-marcellus {
     font-family: "Marcellus", serif;
-  }
+}
+
+.font-space-grotesk {
+    font-family: "Space Grotesk", serif;
+
+}
