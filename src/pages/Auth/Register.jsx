@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import emailjs from "@emailjs/browser";
+import { ClipLoader } from "react-spinners";
 
 const Register = () => {
   const {
@@ -26,7 +27,7 @@ const Register = () => {
   const axiosPublic = useAxiosPublic();
 
   const countryOptions = countryList().getData();
-  const { signup, updateUserProfile,logout } = useAuth();
+  const { signup, updateUserProfile, logout } = useAuth();
   const navigate = useNavigate();
 
   const sendEmail = (data) => {
@@ -37,9 +38,9 @@ const Register = () => {
       user_name: `${data.firstName} ${data.lastName}`, // User's name
       user_email: data.email, // User's email
     };
-  
+
     console.log("Sending email with params:", emailParams);
-  
+
     emailjs
       .send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -62,7 +63,6 @@ const Register = () => {
         }
       );
   };
-
 
   const onSubmit = (data) => {
     setUploading(true);
@@ -111,11 +111,12 @@ const Register = () => {
                   Swal.fire({
                     position: "top-end",
                     icon: "success",
-                    title: "Your account has been created. Check your email for a confirmation!",
+                    title:
+                      "Your account has been created. Check your email for a confirmation!",
                     showConfirmButton: false,
                     timer: 1500,
                   });
-                  logout()
+                  logout();
                   sendEmail(data);
                   navigate("/thanks-for-apply");
                 }
@@ -476,7 +477,10 @@ const Register = () => {
               {...register("terms", { required: "You must accept the terms" })}
               className="h-4 w-4 text-blue-600 focus:ring-red-500 border-gray-300 rounded"
             />
-            <label htmlFor="terms" className="ml-2 block py-2 text-sm text-gray-800">
+            <label
+              htmlFor="terms"
+              className="ml-2 block py-2 text-sm text-gray-800"
+            >
               I confirm that I have read, understand, and agree to the{" "}
               <a href="#" className="text-blue-500 hover:underline">
                 Terms and Conditions
@@ -495,15 +499,21 @@ const Register = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="relative  w-full px-4 py-2 rounded-md font-bold overflow-hidden border border-black
-             bg-red-500 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 
-             before:top-0 before:z-0 before:h-full before:w-0 before:bg-black before:transition-all duration-1000
-             before:duration-1000 hover:text-white hover:before:left-0 hover:before:w-full"
+            disabled={uploading} // Disable the button when uploading
+            className="relative w-full px-4 py-2 rounded-md font-bold overflow-hidden border border-black bg-red-500 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-black before:transition-all duration-1000 before:duration-1000 hover:text-white hover:before:left-0 hover:before:w-full"
           >
-            <span className="relative z-10">Register</span>
+            {uploading ? (
+              <div className="flex items-center justify-center">
+                <ClipLoader color="#ffffff" size={20} /> {/* Spinner */}
+                <span className="ml-2">Registering...</span>{" "}
+                {/* Loading text */}
+              </div>
+            ) : (
+              <span className="relative z-10">Register</span>
+            )}
           </button>
           <p className="text-center text-xs md:text-base">
-            Already Have an Account?{" "} 
+            Already Have an Account?{" "}
             <Link className="text-red-500 font-bold " to="/login">
               Login Now
             </Link>

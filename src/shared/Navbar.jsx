@@ -42,6 +42,15 @@ const Navbar = () => {
       >
         Contact
       </Link>
+      {
+        user && <Link
+        to="/dashboard"
+        className="hover:text-yellow-300 transition duration-300 font-marcellus tracking-widest hover:underline hover:underline-offset-8"
+        onClick={toggleMobileMenu}
+      >
+        DASHBOARD
+      </Link>
+      }
     </>
   );
 

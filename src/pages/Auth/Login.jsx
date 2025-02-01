@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import loginAnimation from "../../assets/LottieFiles/login-cpa.json";
 import {
@@ -14,14 +14,19 @@ import useAuth from "../../hooks/useAuth";
 
 
 const Login = () => {
+
   const [showPassword, setShowPassword] = useState(false); // State to handle password visibility
   const { login } = useAuth();
+  const {user} = useAuth()
+  const navigate = useNavigate()
   // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(""); 
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+
 
 
   const onSubmit = (e) => {
@@ -32,7 +37,7 @@ const Login = () => {
 
     login(email, password)
       .then(() => {
-        alert("Login success");
+        navigate('/dashboard')
       })
       .catch((error) => {
         setError("Login failed. Please check your credentials.");
@@ -41,6 +46,12 @@ const Login = () => {
 
       
   };
+
+  if (user) {
+    navigate('/dashboard')
+  }
+
+
   return (
     <section className="h-screen flex">
       <Helmet>

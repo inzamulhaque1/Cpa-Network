@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Macondo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Marcellus&display&family=Space+Grotesk=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Iceberg&display=swap');
 
 
 @tailwind base;
@@ -20,3 +20,8 @@
     font-family: "Space Grotesk", serif;
 
 }
+
+.font-kumar-one {
+    font-family: "Iceberg", serif;
+    
+  }
