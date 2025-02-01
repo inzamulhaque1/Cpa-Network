@@ -69,21 +69,21 @@ const Register = () => {
     const imageFile = data.image[0];
     const formData = new FormData();
     formData.append("image", imageFile);
-
+  
     const imgbbAPIKey = import.meta.env.VITE_IMGBB_API_KEY;
-
+  
     axios
       .post(`https://api.imgbb.com/1/upload?key=${imgbbAPIKey}`, formData)
       .then((imageResponse) => {
         const imageUrl = imageResponse.data.data.display_url;
-
+  
         signup(data.email, data.password)
           .then((userCredential) => {
             const user = userCredential.user;
-
+  
             // Update the user's Firebase profile
             updateUserProfile(user, data.firstName, data.lastName, imageUrl);
-
+  
             // Prepare user data for MongoDB
             const userData = {
               firstName: data.firstName,
@@ -102,12 +102,17 @@ const Register = () => {
               activeStatus: "pending",
               uid: user.uid,
             };
-
+  
             // Send data to backend for MongoDB storage
             axiosPublic
               .post("/users", userData)
               .then((response) => {
                 if (response.status === 200) {
+                  // Log the publisherId (if returned by the backend)
+                  if (response.data.publisherId) {
+                    console.log("Your Publisher ID:", response.data.publisherId);
+                  }
+  
                   Swal.fire({
                     position: "top-end",
                     icon: "success",
@@ -128,7 +133,6 @@ const Register = () => {
           })
           .catch((error) => {
             console.error("Firebase signup error:", error.message);
-            // alert('Error: ' + error.message);
             toast.error("Email Already Use");
           });
       })
