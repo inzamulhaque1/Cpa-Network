@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { FaCheck, FaBan, FaClock } from "react-icons/fa"; // Import the icons you want to use
+import Swal from 'sweetalert2';
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -25,26 +26,32 @@ const ManageUsers = () => {
     return date.toLocaleDateString("en-GB");
   };
 
-  const handleRoleChange = async (userId, newRole) => {
-    try {
-      const response = await axiosPublic.patch(`/users/role/${userId}`, {
-        role: newRole,
-      });
-      if (response.data.success) {
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user._id === userId ? { ...user, role: newRole } : user
-          )
-        );
-        alert("Role updated successfully!");
-      } else {
+
+  const handleRoleChange = (userId, newRole) => {
+    axiosPublic
+      .patch(`/users/role/${userId}`, { role: newRole })
+      .then((response) => {
+        if (response.data.success) {
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              user._id === userId ? { ...user, role: newRole } : user
+            )
+          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Role updated successfully!',
+            text: 'The role has been changed.',
+          });
+        } else {
+          alert("Failed to update role.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating role:", error);
         alert("Failed to update role.");
-      }
-    } catch (error) {
-      console.error("Error updating role:", error);
-      alert("Failed to update role.");
-    }
+      });
   };
+  
 
   const handleActiveStatusChange = (userId, newStatus) => {
     axiosPublic
@@ -56,7 +63,11 @@ const ManageUsers = () => {
               user._id === userId ? { ...user, activeStatus: newStatus } : user
             )
           );
-          alert("Status updated successfully!");
+          Swal.fire({
+            icon: 'success',
+            title: 'Status updated successfully!',
+            text: 'The status has been changed.',
+          });
         } else {
           alert("Failed to update status.");
         }
@@ -66,6 +77,8 @@ const ManageUsers = () => {
         alert("Failed to update status.");
       });
   };
+
+
 
   if (loading) {
     return (
@@ -78,8 +91,8 @@ const ManageUsers = () => {
   }
 
   return (
-    <div className="p-6 w-full mx-auto">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Manage Users</h1>
+    <div className="p-4 md:p-6 w-full mx-auto">
+      <h1 className="text-2xl md:text-3xl font-bold text-[#143D3A] mb-4 md:mb-6">Manage Users</h1>
       {users.length === 0 ? (
         <p className="text-gray-600">No users found</p>
       ) : (
@@ -87,31 +100,34 @@ const ManageUsers = () => {
           <table className="w-full table-auto border-collapse border border-gray-300 rounded-lg shadow-md">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border p-4 text-left text-sm font-semibold text-gray-600 w-20">
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600 w-20">
                   Id
                 </th>
-                <th className="border p-4 text-left text-sm font-semibold text-gray-600 w-24">
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600 w-24">
                   Country
                 </th>
-                <th className="border p-4 text-left text-sm font-semibold text-gray-600 w-24">
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600 w-24">
                   Photo
                 </th>
-                <th className="border p-4 text-left text-sm font-semibold text-gray-600 w-60">
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600 w-60">
                   Name
                 </th>
-                <th className="border p-4 text-left text-sm font-semibold text-gray-600">
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600">
                   Email
                 </th>
-                <th className="border p-4 text-left text-sm font-semibold text-gray-600 w-32">
-                  Status
-                </th>
-                <th className="border p-4 text-left text-sm font-semibold text-gray-600 w-32">
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600">
                   Role
                 </th>
-                <th className="border p-4 text-left text-sm font-semibold text-gray-600 w-32">
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600 w-32">
+                  Status
+                </th>
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600 w-32">
+                  Role
+                </th>
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600 w-32">
                   Action
                 </th>
-                <th className="border p-4 text-left text-sm font-semibold text-gray-600 w-40">
+                <th className="border p-2 md:p-4 text-left text-xs md:text-sm font-semibold text-gray-600 w-40">
                   Created At
                 </th>
               </tr>
@@ -119,27 +135,30 @@ const ManageUsers = () => {
             <tbody>
               {users.map((user) => (
                 <tr key={user._id} className="hover:bg-gray-50">
-                  <td className="border p-4 text-sm text-gray-700">
+                  <td className="border p-2 md:p-4 text-xs md:text-sm text-gray-700">
                     {user.publisherId}
                   </td>
-                  <td className="border p-4 text-sm text-gray-700">
+                  <td className="border p-2 md:p-4 text-xs md:text-sm text-gray-700">
                     {user.country}
                   </td>
-                  <td className="border p-4 text-sm text-gray-700 flex justify-center items-center">
+                  <td className="border p-2 md:p-4 text-xs md:text-sm text-gray-700 flex justify-center items-center">
                     <img
                       src={user.image}
-                      className="w-12 h-12 object-cover rounded-full"
+                      className="w-10 h-10 md:w-12 md:h-12 object-cover rounded-full"
                       alt="User photo"
                     />
                   </td>
-                  <td className="border p-4 text-sm text-gray-700">
+                  <td className="border p-2 md:p-4 text-xs md:text-sm text-gray-700">
                     {user.firstName} {user.lastName}
                   </td>
-                  <td className="border p-4 text-sm text-gray-700">
+                  <td className="border p-2 md:p-4 text-xs md:text-sm text-gray-700">
                     {user.email}
                   </td>
+                  <td className="border p-2 md:p-4 text-xs md:text-sm text-gray-700">
+                    {user.role}
+                  </td>
 
-                  <td className="border p-4 text-sm text-gray-700">
+                  <td className="border p-2 md:p-4 text-xs md:text-sm text-gray-700">
                     <span
                       className={`px-2 py-1 rounded-md ${
                         user.activeStatus === "approved"
@@ -154,7 +173,7 @@ const ManageUsers = () => {
                     </span>
                   </td>
 
-                  <td className="border p-4 text-sm text-gray-700 capitalize">
+                  <td className="border p-2 md:p-4 text-xs md:text-sm text-gray-700 capitalize">
                     <select
                       value={user.role}
                       onChange={(e) =>
@@ -167,7 +186,8 @@ const ManageUsers = () => {
                       <option value="publisher">Publisher</option>
                     </select>
                   </td>
-                  <td className="border p-4 text-sm font-medium text-gray-700">
+                  
+                  <td className="border p-2 md:p-4 text-xs md:text-sm font-medium text-gray-700">
                     <div className="flex space-x-2 justify-center">
                       <button
                         onClick={() =>
@@ -179,7 +199,7 @@ const ManageUsers = () => {
                             : "bg-gray-200"
                         }`}
                       >
-                        <FaCheck size={20} className="text-white" />
+                        <FaCheck size={16} className="text-white" />
                       </button>
                       <button
                         onClick={() =>
@@ -191,7 +211,7 @@ const ManageUsers = () => {
                             : "bg-gray-200"
                         }`}
                       >
-                        <FaClock size={20} className="text-white" />
+                        <FaClock size={16} className="text-white" />
                       </button>
                       <button
                         onClick={() =>
@@ -203,11 +223,11 @@ const ManageUsers = () => {
                             : "bg-gray-200"
                         }`}
                       >
-                        <FaBan size={20} className="text-white" />
+                        <FaBan size={16} className="text-white" />
                       </button>
                     </div>
                   </td>
-                  <td className="border p-4 text-sm text-gray-700">
+                  <td className="border p-2 md:p-4 text-xs md:text-sm text-gray-700">
                     {formatDateTime(user.createdAt)}
                   </td>
                 </tr>

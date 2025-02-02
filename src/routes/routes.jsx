@@ -6,6 +6,7 @@ import Register from "../pages/Auth/Register";
 import ThanksSignup from "../components/ThanksSignup";
 import Dashboard from "../Layout/Dashboard";
 import ManageUsers from "../pages/Admin/ManageUsers";
+import MyProfile from "../pages/Users/MyProfile";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
       {
         path: 'manage-users',
         element: <ManageUsers></ManageUsers>
+      },
+      // Publisher
+      {
+        path: 'my-profile',
+        element: <MyProfile></MyProfile>
       }
     ]
   },

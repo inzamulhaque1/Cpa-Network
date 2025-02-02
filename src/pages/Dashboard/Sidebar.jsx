@@ -80,13 +80,48 @@ const Sidebar = ({ closeSidebar }) => { // Accept closeSidebar as a prop
                       <FaUser className="text-lg" />
                     )}
                   </NavLink>
+                  <NavLink
+                    to={"add-offers"}
+                    onClick={closeSidebar} // Use closeSidebar prop here
+                    className={({ isActive }) =>
+                      `mb-2 flex items-center hover:bg-blue-600 p-2 rounded ${
+                        isActive
+                          ? "text-white font-bold border-white border-2 bg-red-500"
+                          : "text-white"
+                      }`
+                    }
+                  >
+                    {isSidebarOpen ? (
+                      <span className="ml-2">Add Offers </span>
+                    ) : (
+                      <FaUser className="text-lg" />
+                    )}
+                  </NavLink>
+                  <NavLink
+                    to={"my-profile"}
+                    onClick={closeSidebar} // Use closeSidebar prop here
+                    className={({ isActive }) =>
+                      `mb-2 flex items-center hover:bg-blue-600 p-2 rounded ${
+                        isActive
+                          ? "text-white font-bold border-white border-2 bg-red-500"
+                          : "text-white"
+                      }`
+                    }
+                  >
+                    {isSidebarOpen ? (
+                      <span className="ml-2">My Profile</span>
+                    ) : (
+                      <FaUser className="text-lg" />
+                    )}
+                  </NavLink>
 
                   {/* Repeat for other admin links */}
                 </>
               )}
 
               {/* Agent Links */}
-              {userRole === "agent" && (
+
+              {userRole === "manager" && (
                 <>
                   <NavLink
                     to={"agent-profile"}
@@ -111,7 +146,7 @@ const Sidebar = ({ closeSidebar }) => { // Accept closeSidebar as a prop
               )}
 
               {/* User Links */}
-              {userRole === "user" && (
+              {userRole === "publisher" && (
                 <>
                   <NavLink
                     to={"my-profile"}
@@ -126,6 +161,23 @@ const Sidebar = ({ closeSidebar }) => { // Accept closeSidebar as a prop
                   >
                     {isSidebarOpen ? (
                       <span className="ml-2">My Profile</span>
+                    ) : (
+                      <FaUser className="text-lg" />
+                    )}
+                  </NavLink>
+                  <NavLink
+                    to={"my-payment"}
+                    onClick={closeSidebar} // Use closeSidebar prop here
+                    className={({ isActive }) =>
+                      `mb-2 flex items-center hover:bg-blue-600 p-2 rounded ${
+                        isActive
+                          ? "text-white font-bold border-white border-2 bg-red-500"
+                          : "text-white"
+                      }`
+                    }
+                  >
+                    {isSidebarOpen ? (
+                      <span className="ml-2">My Payment</span>
                     ) : (
                       <FaUser className="text-lg" />
                     )}
