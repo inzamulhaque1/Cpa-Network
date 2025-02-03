@@ -7,6 +7,7 @@ import ThanksSignup from "../components/ThanksSignup";
 import Dashboard from "../Layout/Dashboard";
 import ManageUsers from "../pages/Admin/ManageUsers";
 import MyProfile from "../pages/Users/MyProfile";
+import AddOffers from "../pages/Admin/AddOffers";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: 'manage-users',
         element: <ManageUsers></ManageUsers>
+      },
+      {
+        path: 'add-offers',
+        element: <AddOffers></AddOffers>
       },
       // Publisher
       {
