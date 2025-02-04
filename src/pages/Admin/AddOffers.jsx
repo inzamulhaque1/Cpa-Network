@@ -43,7 +43,7 @@ const AddOffers = () => {
               <input {...register("offerName")} placeholder="Offer Name" className="border p-2 w-full rounded" />
             </div>
             <div>
-              <label className="block text-sm font-medium">Status</label>
+              <label className="block text-sm font-medium">Offer Status</label>
               <select {...register("status")} className="border p-2 w-full rounded">
                 <option value="active">Active</option>
                 <option value="pause">Pause</option>
