@@ -48,7 +48,7 @@ const AddOffers = () => {
   const onSubmit = async (data) => {
     const offerData = {
       ...data,
-      geoLocation: data.geoLocation.map((loc) => loc.label),
+      geoLocation: data.geoLocation.map((loc) => loc.value),
 
     };
 

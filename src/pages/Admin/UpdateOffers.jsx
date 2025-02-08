@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
-import { useForm, Controller } from "react-hook-form";
-import { MultiSelect } from "react-multi-select-component";
-import { countries } from "countries-list";
+import { useForm } from "react-hook-form";
+
 
 const UpdateOffers = () => {
   const { offerId } = useParams(); // Get offerId from URL
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
-  const { handleSubmit, control, register, setValue } = useForm();
+  const { handleSubmit, register, setValue } = useForm();
   const [isLoading, setIsLoading] = useState(true);
 
   // Fetch offer data based on offerId
@@ -20,17 +19,20 @@ const UpdateOffers = () => {
           const offerData = response.data;
           
           // Convert geoLocation to the correct format if necessary
-          if (offerData.geoLocation) {
-            offerData.geoLocation = offerData.geoLocation.map((code) => ({
-              label: countries[code].name,
-              value: code,
-            }));
-          }
+        //   if (offerData.geoLocation) {
+        //     offerData.geoLocation = offerData.geoLocation.map((code) => ({
+        //       label: countries[code].name,
+        //       value: code,
+        //     }));
+        //   }
       
           // Set form values
           Object.keys(offerData).forEach((key) => {
-            setValue(key, offerData[key]);
+            if (offerData[key] !== undefined && offerData[key] !== null) {
+              setValue(key, offerData[key]);
+            }
           });
+          
           setIsLoading(false);
         } catch (error) {
           console.error("Error fetching offer:", error);
@@ -40,18 +42,20 @@ const UpdateOffers = () => {
     fetchOffer();
   }, [offerId, axiosPublic, setValue]);
 
-  const countryOptions = Object.entries(countries).map(([code, { name }]) => ({
-    label: name,
-    value: code,
-  }));
+ 
+
+//   const countryOptions = Object.entries(countries).map(([code, { name }]) => ({
+//     label: name,
+//     value: code,
+//   }));
 
   const onSubmit = async (data) => {
     const updatedData = {
       ...data,
-      geoLocation: data.geoLocation.map((item) => item.value),
+    //   geoLocation: data.geoLocation.map((item) => item.value),
     };
   
-    console.log("Updated Data to send:", updatedData);
+    // console.log("Updated Data to send:", updatedData);
   
     try {
       const response = await axiosPublic.put(`/offers/${offerId}`, updatedData);
@@ -197,7 +201,7 @@ const UpdateOffers = () => {
         </div>
 
         {/* GeoLocation */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-sm font-medium">GeoLocation</label>
           <Controller
             control={control}
@@ -211,7 +215,7 @@ const UpdateOffers = () => {
               />
             )}
           />
-        </div>
+        </div> */}
 
         {/* Submit Button */}
         <div className="text-right">
