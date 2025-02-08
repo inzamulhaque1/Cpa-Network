@@ -2,9 +2,12 @@
 import { useForm, Controller } from "react-hook-form";
 import { MultiSelect } from "react-multi-select-component";
 import { countries } from "countries-list";
+import axios from "axios";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const AddOffers = () => {
-  const { handleSubmit, control, register } = useForm({
+  const axiosPublic = useAxiosPublic();
+  const { handleSubmit, control, register , setValue} = useForm({
     defaultValues: {
       offerName: "",
       status: "active",
@@ -15,20 +18,60 @@ const AddOffers = () => {
       description: "",
       baseRevenue: 0,
       basePayout: 0,
-      trackingDomain: "",
+      trackingDomain: "https://xgenhub.com/",
       caps: "",
       visibility: "public",
       geoLocation: []
     },
   });
 
+  const imgbbAPIKey = import.meta.env.VITE_IMGBB_API_KEY;
+
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await axios.post(`https://api.imgbb.com/1/upload?key=${imgbbAPIKey}`, formData);
+      return response.data.data.url;
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      alert("Failed to upload image.");
+    }
+  };
+
   const countryOptions = Object.entries(countries).map(([code, { name }]) => ({
     label: name,
     value: code,
   }));
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  const onSubmit = async (data) => {
+    const offerData = {
+      ...data,
+      geoLocation: data.geoLocation.map((loc) => loc.label),
+
+    };
+
+    console.log(offerData);
+
+    try {
+      const response = await axiosPublic.post("offers", offerData);
+      console.log("Offer Created:", response.data);
+      alert("Offer added successfully!");
+    } catch (error) {
+      console.error("Error adding offer:", error);
+      alert("Failed to add offer.");
+    }
+  };
+
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = await uploadImage(file);
+      if (imageUrl) {
+        setValue("offerImage", imageUrl);
+      }
+    }
   };
 
   return (
@@ -52,7 +95,8 @@ const AddOffers = () => {
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium">Offer Image</label>
-              <input type="file" {...register("offerImage")} className="border p-2 w-full rounded" />
+              <input type="file" onChange={handleImageChange} className="border p-2 w-full rounded" />
+              <input type="hidden" {...register("offerImage")} />
             </div>
           </div>
         </div>
@@ -98,7 +142,7 @@ const AddOffers = () => {
             </div>
             <div>
               <label className="block text-sm font-medium">Tracking Domain</label>
-              <input {...register("trackingDomain")} placeholder="Tracking Domain" className="border p-2 w-full rounded" />
+              <input {...register("trackingDomain")} placeholder="Tracking Domain"  className="border p-2 w-full rounded" />
             </div>
             <div>
               <label className="block text-sm font-medium">Caps</label>
