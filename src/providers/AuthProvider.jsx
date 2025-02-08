@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     // Set up the auth state observer
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log(currentUser);
+      // console.log(currentUser);
     });
 
     return () => unsubscribe();

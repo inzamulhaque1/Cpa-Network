@@ -15,7 +15,7 @@ const Sidebar = ({ closeSidebar }) => { // Accept closeSidebar as a prop
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic()
 
-  console.log(userRole);
+  // console.log(userRole);
 
   useEffect(()=> {
     if (user?.email) {
@@ -93,6 +93,23 @@ const Sidebar = ({ closeSidebar }) => { // Accept closeSidebar as a prop
                   >
                     {isSidebarOpen ? (
                       <span className="ml-2">Add Offers </span>
+                    ) : (
+                      <FaUser className="text-lg" />
+                    )}
+                  </NavLink>
+                  <NavLink
+                    to={"manage-offers"}
+                    onClick={closeSidebar} // Use closeSidebar prop here
+                    className={({ isActive }) =>
+                      `mb-2 flex items-center hover:bg-blue-600 p-2 rounded ${
+                        isActive
+                          ? "text-white font-bold border-white border-2 bg-red-500"
+                          : "text-white"
+                      }`
+                    }
+                  >
+                    {isSidebarOpen ? (
+                      <span className="ml-2">Manage Offers </span>
                     ) : (
                       <FaUser className="text-lg" />
                     )}

@@ -8,6 +8,8 @@ import Dashboard from "../Layout/Dashboard";
 import ManageUsers from "../pages/Admin/ManageUsers";
 import MyProfile from "../pages/Users/MyProfile";
 import AddOffers from "../pages/Admin/AddOffers";
+import ManageOffers from "../pages/Admin/ManageOffers";
+import UpdateOffer from "../pages/Admin/UpdateOffers";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,14 @@ const router = createBrowserRouter([
       {
         path: 'add-offers',
         element: <AddOffers></AddOffers>
+      },
+      {
+        path: 'manage-offers',
+        element: <ManageOffers></ManageOffers>
+      },
+      {
+        path: 'update-offer/:offerId',
+        element: <UpdateOffer></UpdateOffer>
       },
       // Publisher
       {
