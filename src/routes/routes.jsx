@@ -10,6 +10,7 @@ import MyProfile from "../pages/Users/MyProfile";
 import AddOffers from "../pages/Admin/AddOffers";
 import ManageOffers from "../pages/Admin/ManageOffers";
 import UpdateOffer from "../pages/Admin/UpdateOffers";
+import AllOffers from "../pages/Users/AllOffers";
 
 const router = createBrowserRouter([
   {
@@ -57,9 +58,13 @@ const router = createBrowserRouter([
       },
       // Publisher
       {
+        path: 'offers',
+        element: <AllOffers></AllOffers>
+      },
+      {
         path: 'my-profile',
         element: <MyProfile></MyProfile>
-      }
+      },
     ]
   },
 ]);

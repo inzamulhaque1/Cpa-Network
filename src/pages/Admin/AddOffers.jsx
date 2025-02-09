@@ -49,15 +49,12 @@ const AddOffers = () => {
     const offerData = {
       ...data,
       geoLocation: data.geoLocation.map((loc) => loc.value),
-
     };
-
-    console.log(offerData);
-
+  
     try {
       const response = await axiosPublic.post("offers", offerData);
       console.log("Offer Created:", response.data);
-      alert("Offer added successfully!");
+      alert(`Offer added successfully!`);
     } catch (error) {
       console.error("Error adding offer:", error);
       alert("Failed to add offer.");
