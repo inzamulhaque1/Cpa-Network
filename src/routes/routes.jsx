@@ -11,6 +11,7 @@ import AddOffers from "../pages/Admin/AddOffers";
 import ManageOffers from "../pages/Admin/ManageOffers";
 import UpdateOffer from "../pages/Admin/UpdateOffers";
 import AllOffers from "../pages/Users/AllOffers";
+import OfferDetails from "../pages/Users/OfferDetails";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,11 @@ const router = createBrowserRouter([
         path: 'offers',
         element: <AllOffers></AllOffers>
       },
+      {
+        path: 'offers/:id',
+        element: <OfferDetails></OfferDetails>
+      },
+      
       {
         path: 'my-profile',
         element: <MyProfile></MyProfile>
