@@ -131,6 +131,23 @@ const Sidebar = ({ closeSidebar }) => { // Accept closeSidebar as a prop
                       <FaUser className="text-lg" />
                     )}
                   </NavLink>
+                  <NavLink
+                    to={"offers"}
+                    onClick={closeSidebar} // Use closeSidebar prop here
+                    className={({ isActive }) =>
+                      `mb-2 flex items-center hover:bg-blue-600 p-2 rounded ${
+                        isActive
+                          ? "text-white font-bold border-white border-2 bg-red-500"
+                          : "text-white"
+                      }`
+                    }
+                  >
+                    {isSidebarOpen ? (
+                      <span className="ml-2">All Offers</span>
+                    ) : (
+                      <FaUser className="text-lg" />
+                    )}
+                  </NavLink>
 
                   {/* Repeat for other admin links */}
                 </>

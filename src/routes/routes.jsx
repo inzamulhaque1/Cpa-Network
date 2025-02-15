@@ -12,6 +12,7 @@ import ManageOffers from "../pages/Admin/ManageOffers";
 import UpdateOffer from "../pages/Admin/UpdateOffers";
 import AllOffers from "../pages/Users/AllOffers";
 import OfferDetails from "../pages/Users/OfferDetails";
+import SortUrl from "../components/SortUrl";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     element: <Register></Register>,
   },
   {
+    path: "/ss",
+    element: <SortUrl></SortUrl>,
+  },
+  {
     path: "/dashboard",
     element: <Dashboard></Dashboard>,
     children: [
@@ -57,6 +62,7 @@ const router = createBrowserRouter([
         path: 'update-offer/:offerId',
         element: <UpdateOffer></UpdateOffer>
       },
+      
       // Publisher
       {
         path: 'offers',

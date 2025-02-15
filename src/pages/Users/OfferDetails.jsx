@@ -12,7 +12,8 @@ const OfferDetails = () => {
   const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
   const [profileData, setProfileData] = useState(null);
-  const [clicks, setClicks] = useState(null); // For storing click data
+  const [clicks, setClicks] = useState(null);
+  const [shortUrl, setShortUrl] = useState(null);
 
   useEffect(() => {
     axiosPublic.get(`offers/${id}`).then((response) => {
@@ -36,25 +37,52 @@ const OfferDetails = () => {
 
   useEffect(() => {
     if (profileData?.publisherId && offer?.offerId && offer.trackingDomain) {
-      // Create the tracking URL
       const trackingUrl = `${offer.trackingDomain}/track?publisherId=${profileData.publisherId}&offerId=${offer.offerId}`;
       
-      // Fetch the clicks data from the backend
       axiosPublic
         .get(`/tracking/clicks?url=${encodeURIComponent(trackingUrl)}`)
         .then((response) => {
-          setClicks(response.data.clicks); // Assuming response contains clicks data
+          setClicks(response.data.clicks);
         })
         .catch((error) => {
           console.error("Error fetching clicks data:", error);
         });
     }
-  }, [profileData, offer, axiosPublic]); // Removed clicks from dependency array
-  
-  
-  console.log("Tracking URL:", `${offer?.trackingDomain}/track?publisherId=${profileData?.publisherId}&offerId=${offer?.offerId}`);
-console.log("Clicks:", clicks);
+  }, [profileData, offer, axiosPublic]);
 
+  const generateShortUrl = async (longUrl) => {
+    try {
+      console.log("Sending request to shorten URL:", longUrl); // Debugging
+      const response = await axiosPublic.post('/shorten-url', { url: longUrl });
+      console.log("Short URL Response:", response.data); // Debugging
+      return response.data.shortUrl; // Ensure the response contains `shortUrl`
+    } catch (error) {
+      console.error("Error generating short URL:", error); // Debugging
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    if (offer?.offerUrl && isValidUrl(offer.offerUrl)) {
+      generateShortUrl(offer.offerUrl).then((shortUrl) => {
+        setShortUrl(shortUrl);
+      });
+    } else {
+      setShortUrl("Invalid URL"); // Fallback for invalid URLs
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offer]);
+  
+  // Helper function to validate URLs
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
 
   return (
     <div className="p-6 bg-white rounded-2xl shadow-lg mt-8">
@@ -71,7 +99,6 @@ console.log("Clicks:", clicks);
       ) : offer ? (
         <div className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Image Section */}
             {offer.offerImage && (
               <div className="flex justify-center md:col-span-1">
                 <img
@@ -82,7 +109,6 @@ console.log("Clicks:", clicks);
               </div>
             )}
 
-            {/* General Information Section */}
             <div className="md:col-span-2 space-y-4">
               <h1 className="text-3xl font-bold text-gray-800">
                 <span className="text-red-500"># {offer.offerId}</span> {offer.offerName}
@@ -100,13 +126,11 @@ console.log("Clicks:", clicks);
             </div>
           </div>
 
-          {/* Description Section */}
           <div className="p-4 bg-gray-50 rounded-lg shadow">
             <h2 className="text-lg font-semibold text-gray-700 mb-2">Description</h2>
             <p className="whitespace-pre-wrap">{offer.description || "No description available."}</p>
           </div>
 
-          {/* Links Section */}
           <div className="p-4 bg-gray-50 rounded-lg shadow">
             <h2 className="text-lg font-semibold text-gray-700 mb-2">Links</h2>
             <p>
@@ -122,6 +146,21 @@ console.log("Clicks:", clicks);
                 </a>
               ) : (
                 "N/A"
+              )}
+            </p>
+            <p>
+              <strong>Short URL:</strong>{" "}
+              {shortUrl ? (
+                <a
+                  href={shortUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  {shortUrl}
+                </a>
+              ) : (
+                "Generating short URL..."
               )}
             </p>
             <p>
@@ -141,7 +180,6 @@ console.log("Clicks:", clicks);
             </p>
           </div>
 
-          {/* Clicks Data Section */}
           <div className="p-4 bg-gray-50 rounded-lg shadow">
             <h2 className="text-lg font-semibold text-gray-700 mb-2">Clicks</h2>
             <p>{clicks !== null ? `${clicks} Clicks` : "Loading clicks data..."}</p>
