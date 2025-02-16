@@ -13,7 +13,7 @@ const OfferDetails = () => {
   const { user } = useAuth();
   const [profileData, setProfileData] = useState(null);
   const [clicks, setClicks] = useState(null);
-  const [shortUrl, setShortUrl] = useState(null);
+
 
   useEffect(() => {
     axiosPublic.get(`offers/${id}`).then((response) => {
@@ -50,39 +50,8 @@ const OfferDetails = () => {
     }
   }, [profileData, offer, axiosPublic]);
 
-  const generateShortUrl = async (longUrl) => {
-    try {
-      console.log("Sending request to shorten URL:", longUrl); // Debugging
-      const response = await axiosPublic.post('/shorten-url', { url: longUrl });
-      console.log("Short URL Response:", response.data); // Debugging
-      return response.data.shortUrl; // Ensure the response contains `shortUrl`
-    } catch (error) {
-      console.error("Error generating short URL:", error); // Debugging
-      return null;
-    }
-  };
 
-  useEffect(() => {
-    if (offer?.offerUrl && isValidUrl(offer.offerUrl)) {
-      generateShortUrl(offer.offerUrl).then((shortUrl) => {
-        setShortUrl(shortUrl);
-      });
-    } else {
-      setShortUrl("Invalid URL"); // Fallback for invalid URLs
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offer]);
-  
-  // Helper function to validate URLs
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  };
+
 
   return (
     <div className="p-6 bg-white rounded-2xl shadow-lg mt-8">
@@ -148,21 +117,7 @@ const OfferDetails = () => {
                 "N/A"
               )}
             </p>
-            <p>
-              <strong>Short URL:</strong>{" "}
-              {shortUrl ? (
-                <a
-                  href={shortUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  {shortUrl}
-                </a>
-              ) : (
-                "Generating short URL..."
-              )}
-            </p>
+
             <p>
               <strong>Tracking URL:</strong>{" "}
               {offer.trackingDomain && profileData?.publisherId && offer.offerId ? (
